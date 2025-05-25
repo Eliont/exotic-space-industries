@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.5.8
-Date: ?-??-25
+Version: 1.6.0
+Date: 25-05-25
   Changes:
-    - placeholder for actual list of changes
-    - fixes for steam-engine and blank-tech-card unlocks
+    - Bugfixes
+  Notes:
+    - Contributor 1righteousgod seems step away from modding, Eliont here again 
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.7
 Date: 4-30-25

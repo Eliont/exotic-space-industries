@@ -129,20 +129,20 @@ function model.printBuffStatus()
 
     -- ⟁ Liturgical Echo of the Luminous Spine ⟁
     local incantation = {
-        "☲ EM-Train Diagnostic Invocation Initialized ☲",
-        "Weight of the Outer Shell: "..weight.." quartzian masses",
-        "Base Kinesis Velocity (Prime Engine): "..max_speed.." ∇tiles/s",
-        "Secondary Pod Velocity Threshold: "..max_speed_wagon.." ∇tiles/s",
-        "➣ Speed Amplifier Resonance: ×"..top_speed_multiplier.." (λ"..speed_level..")",
-        "➣ Acceleration Spiral Gain: ×"..acceleration_multiplier.." (φ"..acc_level..")",
-        "➣ Energy Bleed Correction (Null-Waste): ×"..power_consumption_modifier,
-        "Divine Conduction Limit: "..max_power.." / ∂t",
-        "Tether Brakes – Loco: "..braking_force.." force fragments",
-        "Tether Brakes – Cart: "..braking_force_wagon.." force fragments",
-        "Slip-Field Intensity: "..friction_force.." ψN",
-        "Ambient Etheric Drag (Ω drift): "..air_resistance.." μR",
-        "Auditory Phasegate - Entry: "..em_sound_minimum_speed.." Δν",
-        "Auditory Phasegate - Severance: "..em_sound_maximum_speed.." Δν"
+        -- "☲ EM-Train Diagnostic Invocation Initialized ☲",
+        -- "Weight of the Outer Shell: "..weight.." quartzian masses",
+        -- "Base Kinesis Velocity (Prime Engine): "..max_speed.." ∇tiles/s",
+        -- "Secondary Pod Velocity Threshold: "..max_speed_wagon.." ∇tiles/s",
+        -- "➣ Speed Amplifier Resonance: ×"..top_speed_multiplier.." (λ"..speed_level..")",
+        -- "➣ Acceleration Spiral Gain: ×"..acceleration_multiplier.." (φ"..acc_level..")",
+        -- "➣ Energy Bleed Correction (Null-Waste): ×"..power_consumption_modifier,
+        -- "Divine Conduction Limit: "..max_power.." / ∂t",
+        -- "Tether Brakes – Loco: "..braking_force.." force fragments",
+        -- "Tether Brakes – Cart: "..braking_force_wagon.." force fragments",
+        -- "Slip-Field Intensity: "..friction_force.." ψN",
+        -- "Ambient Etheric Drag (Ω drift): "..air_resistance.." μR",
+        -- "Auditory Phasegate - Entry: "..em_sound_minimum_speed.." Δν",
+        -- "Auditory Phasegate - Severance: "..em_sound_maximum_speed.." Δν"
     }
 
     for _, line in ipairs(incantation) do
@@ -156,6 +156,7 @@ end
 
 --Get buffs
 function model.check_buffs()
+    -- game.print("check_buffs")
     local got1 = false
     local got2 = false
     local got3 = false
@@ -172,20 +173,15 @@ function model.check_buffs()
     end
     for tier=20,1, -1 do --reverse so we stop checking that buff when we find its highest value
         if not got1 and game.players[1].force.technologies["ei_acc_"..tier] and game.players[1].force.technologies["ei_acc_"..tier].researched then
-            local accBuff = tonumber(tier)
-            storage.ei_emt.buffs.acc_level = math.max(storage.ei_emt.buffs.acc_level,accBuff)
+            storage.ei_emt.buffs.acc_level = tonumber(tier)
             got1 = true
         end
         if not got2 and game.players[1].force.technologies["ei_spd_"..tier] and game.players[1].force.technologies["ei_spd_"..tier].researched then
-            local spdBuff = tonumber(tier)
-            storage.ei_emt.buffs.speed_level = math.max(storage.ei_emt.buffs.speed_level,spdBuff)
+            storage.ei_emt.buffs.speed_level = tonumber(tier)
             got2 = true
         end
         if not got3 and game.players[1].force.technologies["ei_eff_"..tier] and game.players[1].force.technologies["ei_eff_"..tier].researched then
-            local effBuff = tonumber(tier)
-
-            local actual = model.effBuffMultipliers[effBuff] or 0
-            storage.ei_emt.buffs.charger_efficiency = actual
+            storage.ei_emt.buffs.charger_efficiency = tonumber(tier)
             got3 = true
         end
         if got1 and got2 and got3 then
@@ -193,6 +189,7 @@ function model.check_buffs()
         end
     end
 end
+
 --UPDATE
 ------------------------------------------------------------------------------------------------------
 

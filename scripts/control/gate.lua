@@ -283,6 +283,10 @@ end
 
 
 function model.find_container(gate, surface, position, print_out)
+    if not gate then return false end 
+    if not gate.valid then return false end 
+    if not surface then return false end 
+    if not surface.valid then return false end     
 
     print_out = print_out or false
     local unit = gate.unit_number
@@ -327,6 +331,8 @@ end
 
 
 function model.gate_state(gate)
+    if not gate then return false end 
+    if not gate.valid then return false end 
 
     -- will be false if no exit is set
 
@@ -1118,12 +1124,14 @@ end
 function model.update()
 
     if not storage.ei.gate then
-        return
+      return
     end
 
     if not storage.ei.gate.gate then
-        return
+      return
     end
+
+
     model.update_player_guis()
     --model.update_player_guis()
     -- fixed in remote-config
@@ -1134,19 +1142,19 @@ function model.update()
 
     -- if no current break point then try to make a new one
     if not storage.ei.gate.gate_break_point and next(storage.ei.gate.gate) then
-       storage.ei.gate.gate_break_point,_ = next(storage.ei.gate.gate)
+      storage.ei.gate.gate_break_point,_ = next(storage.ei.gate.gate)
     end
 
     -- if no current break point then return
     if not storage.ei.gate.gate_break_point then
-        return
+      return
     end
 
     -- get current break point
     local break_id = storage.ei.gate.gate_break_point
     if break_id and storage.ei.gate.gate and storage.ei.gate.gate[break_id] then
         local gate = storage.ei.gate.gate[break_id].gate
-        if gate then
+        if gate and gate.valid then
             model.check_for_teleport(break_id, gate)
             model.update_renders(break_id, gate)
             model.update_energy(break_id, gate)
@@ -1155,12 +1163,13 @@ function model.update()
 
     -- get next break point
     if next(storage.ei.gate.gate, break_id) then
-        storage.ei.gate.gate_break_point,_ = next(storage.ei.gate.gate, break_id)
+      storage.ei.gate.gate_break_point,_ = next(storage.ei.gate.gate, break_id)
     else
-       storage.ei.gate.gate_break_point = nil
+      storage.ei.gate.gate_break_point = nil
     end
 
 end
+
 --[[
     for unit,v in pairs(storage.ei.gate.gate) do
 

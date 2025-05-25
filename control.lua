@@ -337,7 +337,7 @@ function reforge_gaia_surface()
     local planet_name = "Gaia"
     local planet = game.planets[planet_name]
     if not planet then
-        ei_lib.crystal_echo("☠ [Void’s Echo] — Gaia’s name lies unwritten; the rite dissolves into silent void.")
+        ei_lib.crystal_echo("[Void’s Echo] — Gaia’s name lies unwritten; the rite dissolves into silent void.")
         return
     end
 
@@ -384,7 +384,7 @@ function reforge_gaia_surface()
     map_gen.name = nil
     local new_surface = game.create_surface(planet_name, map_gen)
     if not new_surface or not new_surface.valid then
-        ei_lib.crystal_echo("☠ [Invocation Fracture] — Failed to birth Gaia’s new form; dusk endures.")
+        ei_lib.crystal_echo("[Invocation Fracture] — Failed to birth Gaia’s new form; dusk endures.")
         return
     end
 
@@ -456,7 +456,7 @@ script.on_configuration_changed(function(e)
 
         storage.ei.original_gaia_settings = full_gaia_map_gen_settings
 
-        -- reforge_gaia_surface() --Must be called AFTER check_global
+        reforge_gaia_surface() --Must be called AFTER check_global
 
     end
     ei_tech_scaling.init()
@@ -572,6 +572,7 @@ ei_update_functions = {
     function() orbital_combinator.update() end, --5
     function() ei_fueler.updater() end, --6
     function() ei_gate.update() end, --7
+    function() em_trains.check_buffs() end,
     function() em_trains.train_updater() end,--8
     function() em_trains.charger_updater() end,--9
 }
@@ -731,6 +732,7 @@ end
 local globalCheckTicks = ei_ticksPerFullUpdate
 script.on_nth_tick(globalCheckTicks, function(event)
     ei_global.check_init()
+    em_trains.check_buffs()
 end)
 
 --[[
