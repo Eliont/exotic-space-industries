@@ -247,7 +247,6 @@ ei_data.add_to_sub_age["alien-computer-age"] = {
 }
 
 ei_data.add_to_sub_age["advanced-computer-age"] = {
-    "mining-productivity-2",
     "research-speed-3",
     "research-speed-4",
     -- "spidertron",
@@ -297,7 +296,6 @@ ei_data.add_to_sub_age["fusion-quantum-age"] = {
 }
 
 ei_data.add_to_sub_age["both-quantum-age"] = {
-    "mining-productivity-4",
     "worker-robots-speed-6",
     "research-speed-6",
     "inserter-capacity-bonus-7",
@@ -488,7 +486,6 @@ ei_data.tech_structure["electricity-age"] = {
     "laser-shooting-speed-2",
     "laser-shooting-speed-3",
     "logistics-2",
-    "mining-productivity-1",
     "nuclear-power",
     "uranium-ammo",
     "uranium-processing",
@@ -563,7 +560,6 @@ ei_data.tech_structure["computer-age"] = {
     "laser-weapons-damage-4",
     "logistics-3",
     "low-density-structure",
-    "mining-productivity-2",
     "rocket-fuel",
     "rocket-silo",
     "rocketry",
@@ -591,8 +587,6 @@ ei_data.tech_structure["quantum-age"] = {
     "research-speed-6",
     "stronger-explosives-6",
     "stronger-explosives-7",
-    "mining-productivity-3",
-    "mining-productivity-4",
     "laser-weapons-damage-5",
     "laser-weapons-damage-6",
     "laser-weapons-damage-7",

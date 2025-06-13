@@ -53,9 +53,94 @@ em_trains_informatron = require("scripts/control/em-trains/informatron")
 
 orbital_combinator = require("scripts/control/orbital_combinator")
 
+
 --====================================================================================================
 --EVENTS
 --====================================================================================================
+
+function youHaveArrived(player)
+  if not player then return end
+  if not player.valid then return end
+  
+  if not player then
+      log("youHaveArrived received null player")
+      return
+  end
+  local surface = player.surface
+  if not surface then return end
+  if not surface.valid then return end
+  local pos = player.position
+  local force = player.force or 1
+  if not surface or not pos or not force then
+      log("youHaveArrived received null surface or pos or force for player ")
+      return
+  else
+      -- Draw multiple electric beams in a ring around the player
+      for i = 1, 12 do
+          local angle = (math.pi * 2 / 12) * i
+          local offset = {
+              x = pos.x + math.cos(angle) * 5,
+              y = pos.y + math.sin(angle) * 5
+          }
+          surface.create_entity{
+              name = "electric-beam",
+              source = offset,
+              position = pos,
+              target = player.character,
+              duration = 120,
+              force = force
+          }
+      end
+
+      -- Summon a "portal"—use smoke or other suitable entity
+      for i = 1, 5 do
+          surface.create_entity{
+              name = "big-artillery-explosion", -- visually dramatic
+              position = {
+                  x = pos.x + ei_rng.float("portalboom") * 2 - 1,
+                  y = pos.y + ei_rng.float("portalboom") * 2 - 1
+              },
+              position = pos,
+              force = force
+          }
+      end
+
+      surface.create_trivial_smoke{
+          name = "electric-smoke",
+          position = pos
+      }
+      local player_indices = {}
+      for _, player in pairs(game.connected_players) do
+        table.insert(player_indices, player.index)
+      end
+      if not ei_lib.getn(player_indices) then return end
+      rendering.draw_light{
+          sprite = "utility/light_medium",
+          target = pos,
+          surface = surface,
+          color = {r = 0.6, g = 0.1, b = 1.0},
+          intensity = 1.5,
+          scale = 4.0,
+          time_to_live = 180,
+          players = player_indices
+      }
+
+      -- rendering.draw_text{
+      --     text = "⟬ THE SYSTEM STIRS ⟭",
+      --     surface = surface,
+      --     target = pos,
+      --     color = {r = 1.0, g = 0.0, b = 0.8},
+      --     alignment = "center",
+      --     scale = 2.5,
+      --     font = "default-large-bold",
+      --     time_to_live = 300,
+      --     players = player_indices
+      -- }
+  end
+ei_lib.crystal_echo("Fragments of GAIA's lament ripple across space-time...")
+ei_lib.crystal_echo("⟬ THE SYSTEM STIRS ⟭","default-bold")
+ei_lib.crystal_echo("⚠️ YOU HAVE BEEN SEEN ⚠️","default-bold")
+end
 
 --INIT
 ------------------------------------------------------------------------------------------------------
@@ -333,7 +418,7 @@ commands.add_command("goto-gaia", "Teleport to Gaia's surface", function(cmd)
 end)
 ]]
 function reforge_gaia_surface()
-    if storage.ei.gaia_reforged == 1 then return end
+    if true then return end
     local planet_name = "Gaia"
     local planet = game.planets[planet_name]
     if not planet then
@@ -382,6 +467,10 @@ function reforge_gaia_surface()
     -- 4) Stage a new surface via low-level API
     local map_gen = util.table.deepcopy(gaia_settings)
     map_gen.name = nil
+    -- error(planet_name)
+    game.delete_surface(game.surfaces[planet_name])
+    if game.surfaces[planet_name] then planet_name = 'gaia' end
+    if game.surfaces[planet_name] then planet_name = 'Gaia' end
     local new_surface = game.create_surface(planet_name, map_gen)
     if not new_surface or not new_surface.valid then
         ei_lib.crystal_echo("[Invocation Fracture] — Failed to birth Gaia’s new form; dusk endures.")
@@ -465,84 +554,7 @@ script.on_configuration_changed(function(e)
     orbital_combinator.check_init()
 end)
 
-local function youHaveArrived(player)
-    if not player then
-        log("youHaveArrived received null player")
-        return
-    end
-    local surface = player.surface
-    local pos = player.position
-    local force = player.force or 1
-    if not surface or not pos or not force then
-        log("youHaveArrived received null surface or pos or force for player ")
-        return
-    else
-        -- Draw multiple electric beams in a ring around the player
-        for i = 1, 12 do
-            local angle = (math.pi * 2 / 12) * i
-            local offset = {
-                x = pos.x + math.cos(angle) * 5,
-                y = pos.y + math.sin(angle) * 5
-            }
-            surface.create_entity{
-                name = "electric-beam",
-                source = offset,
-                position = pos,
-                target = player,
-                duration = 120,
-                force = force
-            }
-        end
 
-        -- Summon a "portal"—use smoke or other suitable entity
-        for i = 1, 5 do
-            surface.create_entity{
-                name = "big-artillery-explosion", -- visually dramatic
-                position = {
-                    x = pos.x + ei_rng.float("portalboom") * 2 - 1,
-                    y = pos.y + ei_rng.float("portalboom") * 2 - 1
-                },
-                position = pos,
-                force = force
-            }
-        end
-
-        surface.create_trivial_smoke{
-            name = "electric-smoke",
-            position = pos
-        }
-        local player_indices = {}
-        for _, player in pairs(game.connected_players) do
-          table.insert(player_indices, player.index)
-        end
-        if not ei_lib.getn(player_indices) then return end
-        rendering.draw_light{
-            sprite = "utility/light_medium",
-            target = pos,
-            surface = surface,
-            color = {r = 0.6, g = 0.1, b = 1.0},
-            intensity = 1.5,
-            scale = 4.0,
-            time_to_live = 180,
-            players = player_indices
-        }
-
-        -- rendering.draw_text{
-        --     text = "⟬ THE SYSTEM STIRS ⟭",
-        --     surface = surface,
-        --     target = pos,
-        --     color = {r = 1.0, g = 0.0, b = 0.8},
-        --     alignment = "center",
-        --     scale = 2.5,
-        --     font = "default-large-bold",
-        --     time_to_live = 300,
-        --     players = player_indices
-        -- }
-    end
-ei_lib.crystal_echo("Fragments of GAIA's lament ripple across space-time...")
-ei_lib.crystal_echo("⟬ THE SYSTEM STIRS ⟭","default-bold")
-ei_lib.crystal_echo("⚠️ YOU HAVE BEEN SEEN ⚠️","default-bold")
-end
 script.on_event(
   {
     defines.events.on_player_joined_game,

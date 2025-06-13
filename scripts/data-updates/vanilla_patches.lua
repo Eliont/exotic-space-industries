@@ -130,7 +130,6 @@ new_prerequisites_table["quantum-age"] = {
 
 numbered_buffs = {
     "stronger-explosives-7",
-    "mining-productivity-4",
     "research-speed-6",
     "worker-robots-speed-6",
     "worker-robots-storage-3",
