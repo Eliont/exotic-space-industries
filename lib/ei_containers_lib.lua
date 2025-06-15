@@ -51,6 +51,7 @@ entity_base['animation'] = mod_entity_base['picture']
 entity_base['name'] = mod_entity_base['name']
 entity_base['minable'] = mod_entity_base['minable']
 entity_base['inventory_size'] = mod_entity_base['inventory_size']
+entity_base['next_upgrade'] = nil
 
 local item_base = {
     name = "ei-1x1-container",
